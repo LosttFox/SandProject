@@ -33,7 +33,7 @@ public class SandLab
     names[METAL] = "Metal";
     
     //1. Add code to initialize the data member grid with same dimensions
-    
+    this.grid = new int [numRows] [numCols];
     
     display = new SandDisplay("Falling Sand", numRows, numCols, names);
   }
