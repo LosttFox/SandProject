@@ -11,6 +11,7 @@ public class SandLab
   //add constants for particle types here
   public static final int EMPTY = 0;
   public static final int METAL = 1;
+  public static final int SAND = 2;
   
   //do not add any more fields below
   private int[][] grid;
@@ -27,10 +28,11 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[2];
+    names = new String[3];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
+    names[SAND] = "Sand";
     
     //1. Add code to initialize the data member grid with same dimensions
     this.grid = new int [numRows] [numCols];
@@ -61,6 +63,10 @@ public class SandLab
 	    		else if (grid[row][col] == METAL)
 	    		{
 	    			display.setColor(row, col, Color.gray);
+	    		}
+	    		else if (grid[row][col] == SAND)
+	    		{
+	    			display.setColor(row, col, new Color(184, 184, 152));
 	    		}
 	    	}
 	    }
