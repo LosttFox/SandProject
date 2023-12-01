@@ -90,12 +90,17 @@ public class SandLab
     {
     	if (randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
     	{
-    		int tool = grid[randomRow + 1][randomCol];
-    		grid[randomRow + 1][randomCol] = grid[randomRow][randomCol];
-    		grid[randomRow][randomCol] = tool;
+    		swapParticles(randomRow, randomCol, randomRow + 1, randomCol);
     	}
     }
     
+  }
+  
+  private void swapParticles(int rowOne, int colOne, int rowTwo, int colTwo)
+  {
+	  int tool = grid[rowTwo][colTwo];
+	  grid[rowOne][colOne] = grid[rowTwo][colTwo];
+	  grid[rowTwo][colTwo] = tool;
   }
   
   //do not modify this method!
