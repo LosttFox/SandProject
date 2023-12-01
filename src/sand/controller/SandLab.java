@@ -13,9 +13,11 @@ public class SandLab
   public static final int METAL = 1;
   public static final int SAND = 2;
   
+  private Color sandColor = new Color(184, 184, 152);
   //do not add any more fields below
   private int[][] grid;
   private SandDisplay display;
+  
   
   
   /**
@@ -66,7 +68,7 @@ public class SandLab
 	    		}
 	    		else if (grid[row][col] == SAND)
 	    		{
-	    			display.setColor(row, col, new Color(184, 184, 152));
+	    			display.setColor(row, col, sandColor);
 	    		}
 	    	}
 	    }
@@ -81,7 +83,18 @@ public class SandLab
     //The scalar refers to how big the value could be
     //int someRandom = (int) (Math.random() * scalar)
     //remember that you need to watch for the edges of the array
+    int randomRow = (int) (Math.random() * grid.length);
+    int randomCol = (int) (Math.random() * grid[0].length);
     
+    if (grid[randomRow][randomCol] == SAND)
+    {
+    	if (randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
+    	{
+    		int tool = grid[randomRow + 1][randomCol];
+    		grid[randomRow + 1][randomCol] = grid[randomRow][randomCol];
+    		grid[randomRow][randomCol] = tool;
+    	}
+    }
     
   }
   
