@@ -148,7 +148,7 @@ public class SandLab
   	}
 	else if (currentRow + 1 < grid.length && grid[currentRow + 1][currentCol] == WATER)
 	{
-		distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow + 1][currentCol]);
+		distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
 	}
   }
   
@@ -168,7 +168,7 @@ public class SandLab
 		  }
 		  else if (grid[currentRow - 1][currentCol] == CHLORINE_GAS)
 		  {
-			  distributeFluids(currentRow, currentCol, randomDirection, UP, grid[currentRow - 1][currentCol]);
+			  distributeFluids(currentRow, currentCol, randomDirection, UP, grid[currentRow][currentCol]);
 		  }
 	  }
   }
