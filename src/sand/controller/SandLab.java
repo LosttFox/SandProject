@@ -43,7 +43,7 @@ public class SandLab
     //Step 4,6
     names = new String[5];
     // Each value needs a name for the button
-    names[EMPTY] = "Empty";
+    names[EMPTY] = "Air (empty)";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
     names[WATER] = "Water";
