@@ -13,8 +13,18 @@ public class SandLab
   public static final int METAL = 1;
   public static final int SAND = 2;
   public static final int WATER = 3;
+  public static final int CHLORINE_GAS = 4;
   
+  // particle colours
   private Color sandColor = new Color(184, 184, 152);
+  private Color chlorineColor = new Color(98, 240, 133, 100);
+  //direction constants
+  private static final int UP = 0;
+  private static final int DOWN = 1;
+  private static final int LEFT = 2;
+  private static final int RIGHT = 3;
+  
+  
   //do not add any more fields below
   private int[][] grid;
   private SandDisplay display;
@@ -31,12 +41,13 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[4];
+    names = new String[5];
     // Each value needs a name for the button
     names[EMPTY] = "Empty";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
     names[WATER] = "Water";
+    names[CHLORINE_GAS] = "Chlorine Gas";
     
     //1. Add code to initialize the data member grid with same dimensions
     this.grid = new int [numRows] [numCols];
@@ -76,6 +87,10 @@ public class SandLab
 	    		{
 	    			display.setColor(row, col, Color.blue);
 	    		}
+	    		else if (grid[row][col] == CHLORINE_GAS)
+	    		{
+	    			display.setColor(row, col, chlorineColor);
+	    		}
 	    	}
 	    }
   }
@@ -99,6 +114,10 @@ public class SandLab
     else if (grid[randomRow][randomCol] == WATER)
     {
     	updateWater(randomRow, randomCol);
+    }
+    else if (grid[randomRow][randomCol] == CHLORINE_GAS)
+    {
+    	updateGas(randomRow, randomCol);
     }
     
   }
@@ -134,6 +153,16 @@ public class SandLab
   		grid[currentRow][currentCol - 1] = WATER;
   	}
   }
+  
+  private void updateGas(int currentRow, int currentCol)
+  {
+	  if (currentRow - 1 > -1)
+	  {
+		  swapParticles(currentRow, currentCol, currentRow - 1, currentCol);
+	  }
+  }
+  
+  
   
   private void swapParticles(int rowOne, int colOne, int rowTwo, int colTwo)
   {
