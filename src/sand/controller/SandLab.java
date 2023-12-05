@@ -94,19 +94,52 @@ public class SandLab
     
     if (grid[randomRow][randomCol] == SAND)
     {
-    	if (randomRow + 1 < grid.length && grid[randomRow + 1][randomCol] == EMPTY)
-    	{
-    		swapParticles(randomRow, randomCol, randomRow + 1, randomCol);
-    	}
+    	updateSand(randomRow, randomCol);
+    }
+    else if (grid[randomRow][randomCol] == WATER)
+    {
+    	updateWater(randomRow, randomCol);
     }
     
+  }
+  
+  private void updateSand(int currentRow, int currentCol)
+  {
+	if (currentRow + 1 < grid.length)
+	{
+		if (grid[currentRow + 1][currentCol] == EMPTY)
+		{
+			swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+		}
+		else if (grid[currentRow + 1][currentCol] == WATER)
+		{
+			grid[currentRow + 1][currentCol] = WATER;
+			swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+		}
+	}
+  }
+  
+  private void updateWater(int currentRow, int currentCol)
+  {
+	if (currentRow + 1 < grid.length && grid[currentRow + 1][currentCol] == EMPTY)
+  	{
+  		swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+  	}
+  	else if (currentCol + 1 < grid[0].length && grid[currentRow][currentCol + 1] == EMPTY)
+  	{
+  		grid[currentRow][currentCol + 1] = WATER;
+  	}
+  	else if (currentCol - 1 > -1 && grid[currentRow][currentCol - 1] == EMPTY)
+  	{
+  		grid[currentRow][currentCol - 1] = WATER;
+  	}
   }
   
   private void swapParticles(int rowOne, int colOne, int rowTwo, int colTwo)
   {
 	  int tool = grid[rowTwo][colTwo];
-	  grid[rowOne][colOne] = grid[rowTwo][colTwo];
-	  grid[rowTwo][colTwo] = tool;
+	  grid[rowTwo][colTwo] = grid[rowOne][colOne];
+	  grid[rowOne][colOne] = tool;
   }
   
   //do not modify this method!
