@@ -14,11 +14,14 @@ public class SandLab
   public static final int SAND = 2;
   public static final int WATER = 3;
   public static final int CHLORINE_GAS = 4;
-  public static final int CLEAR = 5;
+  public static final int LAVA = 5;
+  public static final int OBSIDIAN = 6;
+  public static final int CLEAR = 7;
   
   // particle colours
   private Color sandColor = new Color(184, 184, 152);
   private Color chlorineColor = new Color(98, 240, 133, 10);
+  private Color obsidianColor = new Color(38, 27, 61);
   //direction constants
   private static final int UP = 0;
   private static final int DOWN = 1;
@@ -42,13 +45,15 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[6];
+    names = new String[8];
     // Each value needs a name for the button
     names[EMPTY] = "Air (empty)";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
     names[WATER] = "Water";
     names[CHLORINE_GAS] = "Chlorine Gas";
+    names[LAVA] = "Lava";
+    names[OBSIDIAN] = "Obsidian";
     names[CLEAR] = "Clear";
     
     //1. Add code to initialize the data member grid with same dimensions
@@ -92,6 +97,14 @@ public class SandLab
 	    		else if (grid[row][col] == CHLORINE_GAS)
 	    		{
 	    			display.setColor(row, col, chlorineColor);
+	    		}
+	    		else if (grid[row][col] == LAVA)
+	    		{
+	    			display.setColor(row, col, Color.orange);
+	    		}
+	    		else if (grid[row][col] == OBSIDIAN)
+	    		{
+	    			display.setColor(row, col, obsidianColor);
 	    		}
 	    	}
 	    }
@@ -189,6 +202,11 @@ public class SandLab
 	  }
   }
   
+  private void updateLava(int currentRow, int currentCol)
+  {
+	  
+  }
+  
   private void distributeFluids(int currentRow, int currentCol, int direction, int flowDirection, int particle) 
   {
 	    int shift = 1;
@@ -196,9 +214,32 @@ public class SandLab
 
 	    while ((currentCol - shift >= 0 || currentCol + shift < grid[0].length) && !flowed) 
 	    {
-	        int targetRow = (flowDirection == UP && currentRow - 1 >= 0) ? currentRow - 1 : (flowDirection == DOWN && currentRow + 1 < grid.length) ? currentRow + 1 : currentRow;
-	        int targetCol = (direction == LEFT && currentCol - shift >= 0) ? currentCol - shift : (direction == RIGHT && currentCol + shift < grid[0].length) ? currentCol + shift : currentCol;
+	        // Making targetRow shifted up / down 1 based on flowDirection, also makes sure it doesn't go out of bounds
+	    	int targetRow = currentRow;
+	        
+	        if (flowDirection == UP && currentRow - 1 >= 0)
+	        {
+	        	targetRow = currentRow - 1;
+	        }
+	        else if (flowDirection == DOWN && currentRow + 1 < grid.length)
+	        {
+	        	targetRow = currentRow + 1;
+	        }
+	        
+	        // Making targetCol shifted left / right [shift] amount based on direction, also makes sure it doesn't go out of bounds
+	        int targetCol = currentCol;
 
+	        if (direction == LEFT && currentCol - shift >= 0)
+	        {
+	        	targetCol = currentCol - shift;
+	        }
+	        else if (direction == RIGHT && currentCol + shift < grid[0].length)
+	        {
+	        	targetCol = currentCol + shift;
+	        }
+	        
+	        
+	        
 	        if (grid[targetRow][targetCol] == EMPTY) 
 	        {
 	            swapParticles(currentRow, currentCol, targetRow, targetCol);
@@ -206,21 +247,21 @@ public class SandLab
 	        } 
 			else if (grid[targetRow][targetCol] == METAL || grid[targetRow][targetCol] == SAND) 
 	        {
-	            flowed = true;  // Stop at walls
+	            flowed = true;  
 	        } 
 			else if (grid[targetRow][targetCol] == particle) 
 	        {
-	            shift++;  // Move to the next position
+	            shift++;  
 	        } 
-			else if (density(grid[targetRow][targetCol]) > density(particle) || (particle == CHLORINE_GAS && grid[targetRow][targetCol] < density(particle))) 
+			else if (density(grid[targetRow][targetCol]) > density(particle) || (density(particle) < density(EMPTY)) && grid[targetRow][targetCol] < density(particle))
 	        {
-	            // Swap if the target particle is denser
+	            
 	            swapParticles(currentRow, currentCol, targetRow, targetCol);
 	            flowed = true;
 	        } 
 			else 
 	        {
-	            flowed = true;  // Stop if the target particle is less dense or the same
+	            flowed = true;  
 	        }
 	    }
 	}
