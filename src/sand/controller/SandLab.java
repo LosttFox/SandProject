@@ -14,6 +14,7 @@ public class SandLab
   public static final int SAND = 2;
   public static final int WATER = 3;
   public static final int CHLORINE_GAS = 4;
+  public static final int CLEAR = 5;
   
   // particle colours
   private Color sandColor = new Color(184, 184, 152);
@@ -41,13 +42,14 @@ public class SandLab
     String[] names;
     // Change this value to add more buttons
     //Step 4,6
-    names = new String[5];
+    names = new String[6];
     // Each value needs a name for the button
     names[EMPTY] = "Air (empty)";
     names[METAL] = "Metal";
     names[SAND] = "Sand";
     names[WATER] = "Water";
     names[CHLORINE_GAS] = "Chlorine Gas";
+    names[CLEAR] = "Clear";
     
     //1. Add code to initialize the data member grid with same dimensions
     this.grid = new int [numRows] [numCols];
@@ -118,6 +120,10 @@ public class SandLab
     else if (grid[randomRow][randomCol] == CHLORINE_GAS)
     {
     	updateGas(randomRow, randomCol);
+    }
+    else if (grid[randomRow][randomCol] == CLEAR)
+    {
+    	clear();
     }
     
   }
@@ -301,6 +307,17 @@ public class SandLab
 	  int tool = grid[rowTwo][colTwo];
 	  grid[rowTwo][colTwo] = grid[rowOne][colOne];
 	  grid[rowOne][colOne] = tool;
+  }
+  
+  public void clear()
+  {
+	  for (int outerIndex = 0; outerIndex < grid.length; outerIndex++)
+	  {
+		  for (int innerIndex = 0; innerIndex < grid[0].length; innerIndex++)
+		  {
+			  grid[innerIndex][outerIndex] = EMPTY;
+		  }
+	  }
   }
   
   //do not modify this method!
