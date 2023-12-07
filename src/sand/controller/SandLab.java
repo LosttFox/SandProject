@@ -180,7 +180,7 @@ public class SandLab
 		  }
 		  else if (grid[currentRow - 1][currentCol] == METAL)
 		  {
-			  return;
+			  distributeFluids(currentRow, currentCol, randomDirection, UP, grid[currentRow][currentCol]);
 		  }
 		  else if (grid[currentRow - 1][currentCol] == CHLORINE_GAS)
 		  {
@@ -196,12 +196,10 @@ public class SandLab
 
 	    while ((currentCol - shift >= 0 || currentCol + shift < grid[0].length) && !flowed) 
 	    {
-	        int targetRow;
-	        if (flowDirection == UP && currentRow - 1 >= 0) targetRow = currentRow - 1; else if (flowDirection == DOWN && currentRow + 1 < grid.length) targetRow = currentRow + 1; targetRow = currentRow;
-	        int targetCol;
-	        if (direction == LEFT && currentCol - shift >= 0) targetCol = currentCol - shift; else if (direction == RIGHT && currentCol + shift < grid[0].length) targetCol = currentCol + shift; targetCol = currentCol;
+	        int targetRow = (flowDirection == UP && currentRow - 1 >= 0) ? currentRow - 1 : (flowDirection == DOWN && currentRow + 1 < grid.length) ? currentRow + 1 : currentRow;
+	        int targetCol = (direction == LEFT && currentCol - shift >= 0) ? currentCol - shift : (direction == RIGHT && currentCol + shift < grid[0].length) ? currentCol + shift : currentCol;
 
-	        if (grid[targetRow][targetCol] == EMPTY || grid[targetRow][targetCol] == CHLORINE_GAS) 
+	        if (grid[targetRow][targetCol] == EMPTY) 
 	        {
 	            swapParticles(currentRow, currentCol, targetRow, targetCol);
 	            flowed = true;
@@ -214,7 +212,7 @@ public class SandLab
 	        {
 	            shift++;  // Move to the next position
 	        } 
-			else if (density(grid[targetRow][targetCol]) > density(particle)) 
+			else if (density(grid[targetRow][targetCol]) > density(particle) || (particle == CHLORINE_GAS && grid[targetRow][targetCol] < density(particle))) 
 	        {
 	            // Swap if the target particle is denser
 	            swapParticles(currentRow, currentCol, targetRow, targetCol);
