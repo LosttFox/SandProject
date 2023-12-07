@@ -130,18 +130,24 @@ public class SandLab
   
   private void updateSand(int currentRow, int currentCol)
   {
-	if (currentRow + 1 < grid.length)
-	{
-		if (grid[currentRow + 1][currentCol] == EMPTY)
-		{
-			swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
-		}
-		else if (grid[currentRow + 1][currentCol] == WATER)
-		{
-			grid[currentRow + 1][currentCol] = WATER;
-			swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
-		}
-	}
+	int randomDirection = (int) (Math.random() * 2) + 2;
+	  
+   	if (currentRow + 1 < grid.length)
+   	{
+   		if (grid[currentRow + 1][currentCol] == EMPTY)
+   	{
+   			swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+   		}
+   		else if (grid[currentRow + 1][currentCol] == WATER)
+   		{
+   			grid[currentRow + 1][currentCol] = WATER;
+   			swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+   		}
+   		else if (grid[currentRow + 1][currentCol] == SAND)
+   		{
+   			distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
+   		}
+   	}
   }
   
   private void updateWater(int currentRow, int currentCol)
@@ -152,6 +158,10 @@ public class SandLab
   	{
   		swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
   	}
+	else if (currentRow + 1 < grid.length && (grid[currentRow + 1][currentCol] == METAL || grid[currentRow + 1][currentCol] == SAND))
+	{
+		distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
+	}
 	else if (currentRow + 1 < grid.length && grid[currentRow + 1][currentCol] == WATER)
 	{
 		distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
@@ -164,13 +174,13 @@ public class SandLab
 	  
 	  if (currentRow - 1 > -1)
 	  {
-		  if (grid[currentRow - 1][currentCol] == EMPTY)
+		  if (grid[currentRow - 1][currentCol] == EMPTY || grid[currentRow - 1][currentCol] == WATER)
 		  {
 			  swapParticles(currentRow, currentCol, currentRow - 1, currentCol);
 		  }
-		  else if (grid[currentRow - 1][currentCol] == WATER)
+		  else if (grid[currentRow - 1][currentCol] == METAL)
 		  {
-			  swapParticles(currentRow, currentCol, currentRow - 1, currentCol);
+			  return;
 		  }
 		  else if (grid[currentRow - 1][currentCol] == CHLORINE_GAS)
 		  {
@@ -179,100 +189,44 @@ public class SandLab
 	  }
   }
   
-  private void distributeFluids(int currentRow, int currentCol, int direction, int flowDirection, int particle)
+  private void distributeFluids(int currentRow, int currentCol, int direction, int flowDirection, int particle) 
   {
-	  int shift = 1;
-	  boolean flowed = false;
-	  
-	  if (direction == LEFT)
-	  {
-		  if (flowDirection == DOWN)
-		  {
-			  if (currentRow + 1 < grid.length)
-			  {
-				  while (currentCol - shift > -1 && !flowed)
-				  {
-					  if(density(grid[currentRow + 1][currentCol - shift]) < density(particle))
-					  {
-						  swapParticles(currentRow, currentCol, currentRow + 1, currentCol - shift);
-						  shift = 1;
-						  flowed = true;
-					  }
-					  else
-					  {
-						  shift++;
-					  }
-				  }
-			  }
-		  }
-		  else if (flowDirection == UP)
-		  {
-			  if (currentRow - 1 > -1)
-			  {
-				  while (currentCol - shift > -1 && !flowed)
-				  {
-					  if(density(grid[currentRow - 1][currentCol - shift]) > density(particle))
-					  {
-						  swapParticles(currentRow, currentCol, currentRow - 1, currentCol - shift);
-						  shift = 1;
-						  flowed = true;
-					  }
-					  else
-					  {
-						  shift++;
-					  }
-				  }
-			  }
-		  }
-	  }
-	  else if (direction == RIGHT)
-	  {
-		  if (flowDirection == DOWN)
-		  {
-			  if (currentRow + 1 < grid.length)
-			  {
-				  flowed = false;
-				  while (currentCol + shift < grid[0].length && !flowed)
-				  {
-					  if (density(grid[currentRow + 1][currentCol + shift]) < density(particle))
-					  {
-						  swapParticles(currentRow, currentCol, currentRow + 1, currentCol + shift);
-						  shift = 1;
-						  flowed = true;
-					  }
-					  else
-					  {
-						  shift++;
-					  }
-				  }
-			  }
-		  }
-		  else if (flowDirection == UP)
-		  {
-			  if (currentRow - 1 > -1)
-			  {
-				  flowed = false;
-				  while (currentCol + shift < grid[0].length && !flowed)
-				  {
-					  if (density(grid[currentRow - 1][currentCol + shift]) > density(particle))
-					  {
-						  swapParticles(currentRow, currentCol, currentRow - 1, currentCol + shift);
-						  shift = 1;
-						  flowed = true;
-					  }
-					  else
-					  {
-						  shift++;
-					  }
-				  }
-			  }
-		  }
-	  }
-	  else
-	  {
-		  return;
-	  }
-  }
+	    int shift = 1;
+	    boolean flowed = false;
+
+	    while ((currentCol - shift >= 0 || currentCol + shift < grid[0].length) && !flowed) 
+	    {
+	        int targetRow;
+	        if (flowDirection == UP && currentRow - 1 >= 0) targetRow = currentRow - 1; else if (flowDirection == DOWN && currentRow + 1 < grid.length) targetRow = currentRow + 1; targetRow = currentRow;
+	        int targetCol;
+	        if (direction == LEFT && currentCol - shift >= 0) targetCol = currentCol - shift; else if (direction == RIGHT && currentCol + shift < grid[0].length) targetCol = currentCol + shift; targetCol = currentCol;
+
+	        if (grid[targetRow][targetCol] == EMPTY || grid[targetRow][targetCol] == CHLORINE_GAS) 
+	        {
+	            swapParticles(currentRow, currentCol, targetRow, targetCol);
+	            flowed = true;
+	        } 
+			else if (grid[targetRow][targetCol] == METAL || grid[targetRow][targetCol] == SAND) 
+	        {
+	            flowed = true;  // Stop at walls
+	        } 
+			else if (grid[targetRow][targetCol] == particle) 
+	        {
+	            shift++;  // Move to the next position
+	        } 
+			else if (density(grid[targetRow][targetCol]) > density(particle)) 
+	        {
+	            // Swap if the target particle is denser
+	            swapParticles(currentRow, currentCol, targetRow, targetCol);
+	            flowed = true;
+	        } 
+			else 
+	        {
+	            flowed = true;  // Stop if the target particle is less dense or the same
+	        }
+	    }
+	}
+
   
   private int density(int particle)
   {
