@@ -153,7 +153,6 @@ public class SandLab
    		}
    		else if (grid[currentRow + 1][currentCol] == WATER)
    		{
-   			grid[currentRow + 1][currentCol] = WATER;
    			swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
    		}
    		else if (grid[currentRow + 1][currentCol] == SAND)
@@ -209,7 +208,8 @@ public class SandLab
   
   private void distributeFluids(int currentRow, int currentCol, int direction, int flowDirection, int particle) 
   {
-	    int shift = 1;
+	    boolean isFluid = isFluid(particle);
+	  	int shift = 1;
 	    boolean flowed = false;
 
 	    while ((currentCol - shift >= 0 || currentCol + shift < grid[0].length) && !flowed) 
@@ -253,7 +253,9 @@ public class SandLab
 	        {
 	            shift++;  
 	        } 
-			else if (density(grid[targetRow][targetCol]) > density(particle) || (density(particle) < density(EMPTY)) && grid[targetRow][targetCol] < density(particle))
+			else if ((isFluid && (density(grid[targetRow][targetCol]) > density(particle) 
+				  || (density(particle) < density(EMPTY)) && grid[targetRow][targetCol] < density(particle)))
+				  || (!isFluid && (density(grid[targetRow][targetCol]) < density(particle))))
 	        {
 	            
 	            swapParticles(currentRow, currentCol, targetRow, targetCol);
@@ -293,6 +295,15 @@ public class SandLab
 	  }
 	  
 	  return density;
+  }
+  
+  private boolean isFluid(int particle)
+  {
+	  if (particle == EMPTY || particle == WATER || particle == CHLORINE_GAS || particle == LAVA)
+	  {
+		  return true;
+	  }
+	  return false;
   }
   
   private void swapParticles(int rowOne, int colOne, int rowTwo, int colTwo)
