@@ -17,11 +17,13 @@ public class SandLab
   public static final int LAVA = 5;
   public static final int OBSIDIAN = 6;
   public static final int CLEAR = 7;
+  public static final int GLASS = 8;
   
   // particle colours
   private Color sandColor = new Color(184, 184, 152);
   private Color chlorineColor = new Color(98, 240, 133, 10);
   private Color obsidianColor = new Color(38, 27, 61);
+  private Color glassColor = new Color(255, 255, 255, 1);
   //direction constants
   private static final int UP = 0;
   private static final int DOWN = 1;
@@ -106,6 +108,10 @@ public class SandLab
 	    		{
 	    			display.setColor(row, col, obsidianColor);
 	    		}
+	    		else if (grid[row][col] == GLASS)
+	    		{
+	    			display.setColor(row, col, glassColor);
+	    		}
 	    	}
 	    }
   }
@@ -133,6 +139,10 @@ public class SandLab
     else if (grid[randomRow][randomCol] == CHLORINE_GAS)
     {
     	updateGas(randomRow, randomCol);
+    }
+    else if (grid[randomRow][randomCol] == LAVA)
+    {
+    	updateLava(randomRow, randomCol);
     }
     else if (grid[randomRow][randomCol] == CLEAR)
     {
@@ -285,13 +295,21 @@ public class SandLab
 	  {
 		  density = 2;
 	  }
-	  else if (particle == SAND)
+	  else if (particle == LAVA)
 	  {
 		  density = 3;
 	  }
-	  else if (particle == METAL)
+	  else if (particle == SAND || particle == GLASS)
 	  {
 		  density = 4;
+	  }
+	  else if (particle == METAL)
+	  {
+		  density = 5;
+	  }
+	  else if (particle == OBSIDIAN)
+	  {
+		  density = 6;
 	  }
 	  
 	  return density;
