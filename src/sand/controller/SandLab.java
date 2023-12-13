@@ -279,7 +279,19 @@ public class SandLab
 	        } 
 			else if (grid[targetRow][targetCol] == METAL || grid[targetRow][targetCol] == SAND || grid[targetRow][targetCol] == OBSIDIAN) 
 	        {
-	            flowed = true;  
+	            if (particle == SAND)
+	            {
+	            	if (direction == LEFT && targetCol - 1 >= 0)
+	            	{
+	            		swapParticles(currentRow, currentCol, targetRow, targetCol - 1);
+	            	}
+	            	else if (direction == RIGHT && targetCol + 1 < grid[0].length)
+	            	{
+	            		swapParticles(currentRow, currentCol, targetRow, targetCol + 1);
+	            	}
+	            	flowed =true;
+	            }
+				flowed = true;  
 	        } 
 			else if (grid[targetRow][targetCol] == particle) 
 	        {
