@@ -230,6 +230,9 @@ public class SandLab
 		  else if (tileBelow == WATER)
 		  {
 			  grid[currentRow + 1][currentCol] = OBSIDIAN;
+		  }
+		  else if (tileBelow == LAVA)
+		  {
 			  distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
 		  }
 	  }
@@ -274,7 +277,7 @@ public class SandLab
 	            swapParticles(currentRow, currentCol, targetRow, targetCol);
 	            flowed = true;
 	        } 
-			else if (grid[targetRow][targetCol] == METAL || grid[targetRow][targetCol] == SAND) 
+			else if (grid[targetRow][targetCol] == METAL || grid[targetRow][targetCol] == SAND || grid[targetRow][targetCol] == OBSIDIAN) 
 	        {
 	            flowed = true;  
 	        } 
