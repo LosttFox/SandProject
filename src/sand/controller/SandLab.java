@@ -184,11 +184,7 @@ public class SandLab
   	{
   		swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
   	}
-	else if (currentRow + 1 < grid.length && (grid[currentRow + 1][currentCol] == METAL || grid[currentRow + 1][currentCol] == SAND))
-	{
-		distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
-	}
-	else if (currentRow + 1 < grid.length && grid[currentRow + 1][currentCol] == WATER)
+	else if (currentRow + 1 < grid.length && (grid[currentRow + 1][currentCol] == METAL || grid[currentRow + 1][currentCol] == SAND || grid[currentRow + 1][currentCol] == WATER))
 	{
 		distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
 	}
@@ -217,18 +213,24 @@ public class SandLab
   
   private void updateLava(int currentRow, int currentCol)
   {
-	  int tileBelow = grid[currentRow + 1][currentCol];
+	  int randomDirection = (int) (Math.random() * 2) + 2;
 	  
 	  if (currentRow + 1 < grid.length)
 	  {
+		  int tileBelow = grid[currentRow + 1][currentCol];
+		  
 		  if (tileBelow == EMPTY || tileBelow == CHLORINE_GAS)
 		  {
 			  swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
 		  }
 		  else if (tileBelow == METAL)
 		  {
-			  tileBelow = EMPTY;
-			  swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+			  grid[currentRow + 1][currentCol] = LAVA;
+		  }
+		  else if (tileBelow == WATER)
+		  {
+			  grid[currentRow + 1][currentCol] = OBSIDIAN;
+			  distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
 		  }
 	  }
   }
