@@ -23,7 +23,7 @@ public class SandLab
   private Color sandColor = new Color(184, 184, 152);
   private Color chlorineColor = new Color(98, 240, 133, 10);
   private Color obsidianColor = new Color(38, 27, 61);
-  private Color glassColor = new Color(255, 255, 255, 1);
+  private Color glassColor = new Color(255, 255, 255);
   //direction constants
   private static final int UP = 0;
   private static final int DOWN = 1;
@@ -169,6 +169,10 @@ public class SandLab
    		{
    			distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
    		}
+   		else if (grid[currentRow + 1][currentCol] == LAVA)
+   		{
+   			grid[currentRow][currentCol] = GLASS;
+   		}
    	}
   }
   
@@ -196,7 +200,7 @@ public class SandLab
 	  
 	  if (currentRow - 1 > -1)
 	  {
-		  if (grid[currentRow - 1][currentCol] == EMPTY || grid[currentRow - 1][currentCol] == WATER)
+		  if (grid[currentRow - 1][currentCol] == EMPTY || grid[currentRow - 1][currentCol] == WATER || grid[currentRow - 1][currentCol] == LAVA)
 		  {
 			  swapParticles(currentRow, currentCol, currentRow - 1, currentCol);
 		  }
@@ -213,7 +217,20 @@ public class SandLab
   
   private void updateLava(int currentRow, int currentCol)
   {
+	  int tileBelow = grid[currentRow + 1][currentCol];
 	  
+	  if (currentRow + 1 < grid.length)
+	  {
+		  if (tileBelow == EMPTY || tileBelow == CHLORINE_GAS)
+		  {
+			  swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+		  }
+		  else if (tileBelow == METAL)
+		  {
+			  tileBelow = EMPTY;
+			  swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
+		  }
+	  }
   }
   
   private void distributeFluids(int currentRow, int currentCol, int direction, int flowDirection, int particle) 
