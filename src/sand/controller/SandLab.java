@@ -184,6 +184,11 @@ public class SandLab
   	{
   		swapParticles(currentRow, currentCol, currentRow + 1, currentCol);
   	}
+	else if (currentRow + 1 < grid.length && grid[currentRow + 1][currentCol] == LAVA)
+	{
+		grid [currentRow + 1][currentCol] = OBSIDIAN;
+		grid[currentRow][currentCol] = EMPTY;
+	}
 	else if (currentRow + 1 < grid.length && (grid[currentRow + 1][currentCol] == METAL || grid[currentRow + 1][currentCol] == SAND || grid[currentRow + 1][currentCol] == WATER))
 	{
 		distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
@@ -196,7 +201,7 @@ public class SandLab
 	  
 	  if (currentRow - 1 > -1)
 	  {
-		  if (grid[currentRow - 1][currentCol] == EMPTY || grid[currentRow - 1][currentCol] == WATER || grid[currentRow - 1][currentCol] == LAVA)
+		  if (grid[currentRow - 1][currentCol] == EMPTY || grid[currentRow - 1][currentCol] == WATER || grid[currentRow - 1][currentCol] == LAVA || grid[currentRow - 1][currentCol] == SAND)
 		  {
 			  swapParticles(currentRow, currentCol, currentRow - 1, currentCol);
 		  }
@@ -230,12 +235,13 @@ public class SandLab
 		  else if (tileBelow == WATER)
 		  {
 			  grid[currentRow + 1][currentCol] = OBSIDIAN;
+			  grid[currentRow][currentCol] = EMPTY;
 		  }
 		  else if (tileBelow == SAND)
 		  {
 			  grid[currentRow + 1][currentCol] = GLASS;
 		  }
-		  else if (tileBelow == LAVA)
+		  else if (tileBelow == LAVA || tileBelow == OBSIDIAN || tileBelow == GLASS)
 		  {
 			  distributeFluids(currentRow, currentCol, randomDirection, DOWN, grid[currentRow][currentCol]);
 		  }
@@ -281,22 +287,10 @@ public class SandLab
 	            swapParticles(currentRow, currentCol, targetRow, targetCol);
 	            flowed = true;
 	        } 
-			else if (grid[targetRow][targetCol] == METAL || grid[targetRow][targetCol] == SAND || grid[targetRow][targetCol] == OBSIDIAN || grid[targetRow][targetCol] == GLASS) 
+			else if (grid[targetRow][targetCol] == METAL || grid[targetRow][targetCol] == OBSIDIAN || grid[targetRow][targetCol] == GLASS || grid[targetRow][targetCol] == SAND) 
 	        {
-	            if (particle == SAND)
-	            {
-	            	if (direction == LEFT && targetCol - 1 >= 0)
-	            	{
-	            		swapParticles(currentRow, currentCol, targetRow, targetCol - 1);
-	            	}
-	            	else if (direction == RIGHT && targetCol + 1 < grid[0].length)
-	            	{
-	            		swapParticles(currentRow, currentCol, targetRow, targetCol + 1);
-	            	}
-	            	flowed =true;
-	            }
 				flowed = true;  
-	        } 
+	        }
 			else if (grid[targetRow][targetCol] == particle) 
 	        {
 	            shift++;  
