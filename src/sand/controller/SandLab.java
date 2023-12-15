@@ -16,7 +16,7 @@ public class SandLab
   public static final int CHLORINE_GAS = 4;
   public static final int LAVA = 5;
   public static final int OBSIDIAN = 6;
-  public static final int CLEAR = 7;
+  public static final int FILL = 7;
   public static final int GLASS = 8;
   
   // particle colours
@@ -56,7 +56,7 @@ public class SandLab
     names[CHLORINE_GAS] = "Chlorine Gas";
     names[LAVA] = "Lava";
     names[OBSIDIAN] = "Obsidian";
-    names[CLEAR] = "Clear";
+    names[FILL] = "Fill";
     
     //1. Add code to initialize the data member grid with same dimensions
     this.grid = new int [numRows] [numCols];
@@ -144,9 +144,9 @@ public class SandLab
     {
     	updateLava(randomRow, randomCol);
     }
-    else if (grid[randomRow][randomCol] == CLEAR)
+    else if (grid[randomRow][randomCol] == FILL)
     {
-    	clear();
+    	fill(display.getTool());
     }
     
   }
@@ -363,13 +363,13 @@ public class SandLab
 	  grid[rowOne][colOne] = tool;
   }
   
-  public void clear()
+  public void fill(int particle)
   {
 	  for (int outerIndex = 0; outerIndex < grid.length; outerIndex++)
 	  {
 		  for (int innerIndex = 0; innerIndex < grid[0].length; innerIndex++)
 		  {
-			  grid[innerIndex][outerIndex] = EMPTY;
+			  grid[innerIndex][outerIndex] = particle;
 		  }
 	  }
   }
